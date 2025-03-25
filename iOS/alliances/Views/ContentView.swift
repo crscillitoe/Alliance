@@ -24,7 +24,7 @@ struct ContentView: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                allianceIdentifierModel.loadAllianceID()
+                allianceIdentifierModel.loadAlliance()
                 isModelLoaded = true
             }
         }

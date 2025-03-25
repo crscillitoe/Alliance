@@ -9,22 +9,29 @@ import SwiftUI
 
 class AllianceIdentifierModel: ObservableObject {
     @Published var allianceId: String? = nil
+    @Published var allianceName: String? = nil
 
     init() {
-        loadAllianceID()
+        clearAlliance()
+        loadAlliance()
     }
     
-    init(allianceId: String) {
+    init(allianceId: String, allianceName: String) {
         self.allianceId = allianceId
+        self.allianceName = allianceName
     }
 
-    func loadAllianceID() {
+    func loadAlliance() {
         DispatchQueue.main.async {
             if let savedAllianceId = UserDefaults.standard.string(
                 forKey: "allianceId")
             {
                 print("Loaded \(savedAllianceId) from UserDefaults")
                 self.allianceId = savedAllianceId
+            }
+            
+            if let savedAllianceName = UserDefaults.standard.string(forKey: "allianceName") {
+                self.allianceName = savedAllianceName
             }
         }
     }
@@ -35,11 +42,20 @@ class AllianceIdentifierModel: ObservableObject {
             self.allianceId = allianceId
         }
     }
+    
+    func saveAllianceName(allianceName: String) {
+        DispatchQueue.main.async {
+            UserDefaults.standard.set(allianceName, forKey: "allianceName")
+            self.allianceName = allianceName
+        }
+    }
 
-    func clearAllianceID() {
+    func clearAlliance() {
         DispatchQueue.main.async {
             UserDefaults.standard.removeObject(forKey: "allianceId")
+            UserDefaults.standard.removeObject(forKey: "allianceName")
             self.allianceId = nil
+            self.allianceName = nil
         }
     }
 }

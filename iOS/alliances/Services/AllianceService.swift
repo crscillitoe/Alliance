@@ -6,12 +6,23 @@
 //
 import Foundation
 
-struct FetchSizeRequest: Codable {
+struct FetchAllianceRequest: Codable {
     let passphrase: String
+}
+
+struct Alliance: Codable {
+    let destroyed: String
+    let name: String
+    let size: Int
 }
 
 struct DestroyAllianceRequest: Codable {
     let passphrase: String
+    let message: String
+}
+
+struct FormAllianceRequest: Codable {
+    let name: String
 }
 
 class AllianceService {
@@ -22,15 +33,23 @@ class AllianceService {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
 
-        let (data, _) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let requestBody = FormAllianceRequest(name: "Test Alliance Name")
+        let encoder = JSONEncoder()
+        request.httpBody = try encoder.encode(requestBody)
+
+        let (data, _) = try await URLSession.shared.data(for: request)
         guard let responseString = String(data: data, encoding: .utf8) else {
             throw NSError(domain: "Invalid data", code: 0, userInfo: nil)
         }
         return responseString
     }
 
-    func fetchAllianceSize(allianceId: String) async throws -> Int {
-        guard let url = URL(string: "\(baseURL)/get_alliance_size") else {
+    func fetchAlliance(allianceId: String) async throws -> Alliance {
+        guard let url = URL(string: "\(baseURL)/get_alliance") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
 
@@ -38,22 +57,29 @@ class AllianceService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let requestBody = FetchSizeRequest(passphrase: allianceId)
+        let requestBody = FetchAllianceRequest(passphrase: allianceId)
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(requestBody)
-        
+
         let (data, response) = try await URLSession.shared.data(for: request)
-        
-        if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-            throw NSError(domain: "Failed to fetch alliance size", code: 0, userInfo: nil)
+
+        if let httpResponse = response as? HTTPURLResponse,
+            httpResponse.statusCode != 200
+        {
+            throw NSError(
+                domain: "Failed to fetch alliance", code: 0, userInfo: nil)
         }
         
-        guard let allianceSize = try? JSONDecoder().decode(Int.self, from: data) else {
-            throw NSError(domain: "Invalid alliance size returned", code: 0, userInfo: nil)
+        guard
+            let alliance = try? JSONDecoder().decode(Alliance.self, from: data)
+        else {
+            throw NSError(
+                domain: "Invalid alliance returned", code: 0, userInfo: nil
+            )
         }
-        return allianceSize
+        return alliance
     }
-    
+
     func destroyAlliance(allianceId: String) async throws -> Bool {
         guard let url = URL(string: "\(baseURL)/destroy_alliance") else {
             return false
@@ -63,12 +89,13 @@ class AllianceService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let requestBody = FetchSizeRequest(passphrase: allianceId)
+        let requestBody = DestroyAllianceRequest(
+            passphrase: allianceId, message: "Test destroy alliance")
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(requestBody)
-        
+
         let (_, response) = try await URLSession.shared.data(for: request)
-        
+
         guard let httpResponse = response as? HTTPURLResponse else {
             return false
         }

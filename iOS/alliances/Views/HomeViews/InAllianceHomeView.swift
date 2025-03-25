@@ -27,7 +27,7 @@ struct InAllianceHomeView: View {
                         .font(.system(size: 120))
                         .padding()
                         .foregroundColor(.white)
-                    Text("\(getDisplayId())")
+                    Text("\(getDisplayName())")
                         .font(.body)
                         .foregroundColor(.gray)
                     Spacer()
@@ -67,7 +67,7 @@ struct InAllianceHomeView: View {
             .background(.black)
             .onAppear {
                 if allianceSize == nil {
-                    fetchAllianceSize()
+                    fetchAlliance()
                 }
             }
         }
@@ -78,6 +78,14 @@ struct InAllianceHomeView: View {
             return ""
         }
         return String(allianceId.split(separator: "-").last!)
+    }
+
+    private func getDisplayName() -> String {
+        let defaultName = "Unknown"
+        guard let name = allianceIdentifierModel.allianceName else {
+            return defaultName
+        }
+        return name.isEmpty ? defaultName : name
     }
 
     private func destroyAlliance() {
@@ -92,7 +100,7 @@ struct InAllianceHomeView: View {
                     allianceId: allianceId)
 
                 if result {
-                    allianceIdentifierModel.clearAllianceID()
+                    allianceIdentifierModel.clearAlliance()
                 }
             } catch {
                 print("Error:", error)
@@ -101,12 +109,12 @@ struct InAllianceHomeView: View {
         }
     }
 
-    private func fetchAllianceSize() {
+    private func fetchAlliance() {
         Task {
             do {
-                let size = try await AllianceService().fetchAllianceSize(
-                    allianceId: allianceIdentifierModel.allianceId!)
-                allianceSize = size
+                let alliance = try await FetchAllianceController.fetchAlliance(
+                    allianceIdentifierModel: allianceIdentifierModel)
+                allianceSize = alliance.size
                 isLoading = false
             } catch {
                 print("Error:", error)
@@ -119,5 +127,6 @@ struct InAllianceHomeView: View {
     InAllianceHomeView(allianceSize: 1, isLoading: false)
         .environmentObject(
             AllianceIdentifierModel(
-                allianceId: "cd3645ef-a3d3-42e9-84a2-47d96cb81845"))
+                allianceId: "cd3645ef-a3d3-42e9-84a2-47d96cb81845",
+                allianceName: "Test Alliance"))
 }
