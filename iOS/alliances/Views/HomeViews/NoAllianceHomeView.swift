@@ -26,9 +26,7 @@ struct NoAllianceHomeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Button(action: {
-                    formAlliance()
-                }) {
+                NavigationLink(destination: FormAllianceView()) {
                     Text("Form Alliance")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -53,21 +51,6 @@ struct NoAllianceHomeView: View {
             .padding()
             .containerRelativeFrame([.horizontal, .vertical])
             .background(.black)
-            .navigationDestination(isPresented: $isFormAlliancePresented) {
-                FormAllianceView()
-            }
-        }
-    }
-
-    private func formAlliance() {
-        Task {
-            do {
-                try await FormAllianceController.formAlliance(
-                    allianceIdentifierModel: allianceIdentifierModel)
-                // TODO: use FormAllianceView when we can name alliances
-            } catch {
-                print("Error:", error)
-            }
         }
     }
 }

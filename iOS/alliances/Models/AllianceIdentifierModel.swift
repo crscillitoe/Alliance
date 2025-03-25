@@ -12,7 +12,6 @@ class AllianceIdentifierModel: ObservableObject {
     @Published var allianceName: String? = nil
 
     init() {
-        clearAlliance()
         loadAlliance()
     }
     

@@ -28,7 +28,7 @@ struct FormAllianceRequest: Codable {
 class AllianceService {
     let baseURL = "https://alliance-api.woohooj.in"
 
-    func formAlliance() async throws -> String {
+    func formAlliance(allianceName: String) async throws -> String {
         guard let url = URL(string: "\(baseURL)/form_alliance") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }
@@ -37,7 +37,7 @@ class AllianceService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let requestBody = FormAllianceRequest(name: "Test Alliance Name")
+        let requestBody = FormAllianceRequest(name: allianceName)
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(requestBody)
 
