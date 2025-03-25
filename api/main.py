@@ -20,7 +20,8 @@ with sqlite3.connect("alliance.db") as con:
     CREATE TABLE IF NOT EXISTS alliances(
         passphrase TEXT PRIMARY KEY,
         name TEXT,
-        size INTEGER
+        size INTEGER,
+        destroyed TEXT
     )
     """)
     con.commit()
@@ -40,35 +41,37 @@ def close_connection(exception):
         db.close()
 # --------------------------------------------------------------------------------- #
 # ------- Form Alliance ----------------------------------------------------------- #
-@app.route("/form_alliance", methods=["GET"])
+@app.route("/form_alliance", methods=["POST"])
 @cross_origin(support_credentials=True)
 @limiter.limit("10 per day")
 def form_alliance():
     random_uuid = uuid.uuid4()
+    name = request.json['name']
     db = get_db()
     cur = db.cursor()
     cur.execute("""
-    INSERT INTO alliances (passphrase, name, size)
+    INSERT INTO alliances (passphrase, name, size, destroyed)
     VALUES (
         ?,
-        'Placeholder',
-        1
+        ?,
+        1,
+        ''
     )
-    """, (str(random_uuid), ))
+    """, (str(random_uuid), name))
 
     db.commit()
 
     return str(random_uuid), 200
 # --------------------------------------------------------------------------------- #
 # ------- Get Alliance Size ------------------------------------------------------- #
-@app.route("/get_alliance_size", methods=["POST"])
+@app.route("/get_alliance", methods=["POST"])
 @cross_origin(support_credentials=True)
 @limiter.limit("10 per day")
 def get_alliance_size():
     key = request.json['passphrase']
     cur = get_db().cursor()
     cur.execute("""
-    SELECT size FROM alliances
+    SELECT name, size, destroyed FROM alliances
         WHERE passphrase = ?
     """, (key, ))
 
@@ -76,7 +79,11 @@ def get_alliance_size():
     if result is None:
         return "Invalid Alliance", 200
 
-    return str(result[0]), 200
+    return {
+        'name': str(result[0]),
+        'size': result[1],
+        'destroyed': str(result[2])
+    }, 200
 # --------------------------------------------------------------------------------- #
 # ------- Destroy Alliance -------------------------------------------------------- #
 @app.route("/destroy_alliance", methods=["POST"])
@@ -84,12 +91,15 @@ def get_alliance_size():
 @limiter.limit("1 per day")
 def destroy_alliance():
     key = request.json['passphrase']
+    message = request.json['message']
     db = get_db()
     cur = db.cursor()
     cur.execute("""
-    DELETE FROM alliances
+    UPDATE alliances
+        SET size = 0,
+            destroyed = ?
         WHERE passphrase = ?
-    """, (key, ))
+    """, (message, key, ))
 
     if cur.rowcount == 0:
         return "Fail", 200
