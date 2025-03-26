@@ -30,7 +30,8 @@ struct ContentView: View {
         }
         .animation(
             isModelLoaded ? .easeInOut : .none,
-            value: allianceIdentifierModel.allianceId)
+            value: allianceIdentifierModel.allianceId
+        )
     }
 }
 

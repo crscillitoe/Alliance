@@ -80,7 +80,7 @@ class AllianceService {
         return alliance
     }
 
-    func destroyAlliance(allianceId: String) async throws -> Bool {
+    func destroyAlliance(allianceId: String, message: String) async throws -> Bool {
         guard let url = URL(string: "\(baseURL)/destroy_alliance") else {
             return false
         }
@@ -90,7 +90,7 @@ class AllianceService {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let requestBody = DestroyAllianceRequest(
-            passphrase: allianceId, message: "Test destroy alliance")
+            passphrase: allianceId, message: message)
         let encoder = JSONEncoder()
         request.httpBody = try encoder.encode(requestBody)
 

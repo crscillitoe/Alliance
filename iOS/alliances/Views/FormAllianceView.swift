@@ -25,7 +25,8 @@ struct FormAllianceView: View {
                 .background(.black)
                 .foregroundColor(.white)
                 .cornerRadius(10)
-                .shadow(radius: 3)
+                .shadow(color: primaryButtonColor.opacity(0.2), radius: 10, x: 0, y: -5)
+                .shadow(color: .blue.opacity(0.2), radius: 10, x: 0, y: 5)
                 .accentColor(.white)
                 .frame(maxWidth: 350)
                 .overlay(
@@ -86,7 +87,7 @@ struct FormAllianceView: View {
                 try await FormAllianceController.formAlliance(
                     allianceName: allianceName,
                     allianceIdentifierModel: allianceIdentifierModel)
-                // TODO: use FormAllianceView when we can name alliances
+                //dismiss()
             } catch {
                 print("Error:", error)
             }

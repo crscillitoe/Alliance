@@ -10,7 +10,7 @@ import SwiftUI
 struct InAllianceHomeView: View {
     @State var allianceSize: Int?
     @State var isLoading = true
-    @State private var showAlert = false
+    @State var destroying = false
 
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
 
@@ -32,7 +32,7 @@ struct InAllianceHomeView: View {
                         .foregroundColor(.gray)
                     Spacer()
                     Button(action: {
-                        showAlert = true
+                        destroying = true
                     }) {
                         Text("Destroy Alliance")
                             .font(.headline)
@@ -42,17 +42,6 @@ struct InAllianceHomeView: View {
                             .background(.red)
                             .cornerRadius(10)
                             .shadow(radius: 3)
-                    }
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("Are you sure?"),
-                            message: Text(
-                                "Do you really want to destroy this alliance?"),
-                            primaryButton: .destructive(Text("Destroy")) {
-                                destroyAlliance()
-                            },
-                            secondaryButton: .cancel()
-                        )
                     }
                     Spacer()
                 } else {
@@ -68,6 +57,14 @@ struct InAllianceHomeView: View {
             .onAppear {
                 if allianceSize == nil {
                     fetchAlliance()
+                }
+            }
+            .navigationDestination(isPresented: $destroying) {
+                DestroyAllianceView()
+            }
+            .onChange(of: allianceIdentifierModel.allianceId) {
+                if allianceIdentifierModel.allianceId != nil {
+                    destroying = false
                 }
             }
         }
@@ -86,27 +83,6 @@ struct InAllianceHomeView: View {
             return defaultName
         }
         return name.isEmpty ? defaultName : name
-    }
-
-    private func destroyAlliance() {
-        Task {
-            do {
-                isLoading = true
-                guard let allianceId = allianceIdentifierModel.allianceId else {
-                    return
-                }
-
-                let result = try await AllianceService().destroyAlliance(
-                    allianceId: allianceId)
-
-                if result {
-                    allianceIdentifierModel.clearAlliance()
-                }
-            } catch {
-                print("Error:", error)
-                isLoading = false
-            }
-        }
     }
 
     private func fetchAlliance() {
