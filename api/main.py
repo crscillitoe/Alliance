@@ -66,7 +66,7 @@ def form_alliance():
 # ------- Get Alliance Size ------------------------------------------------------- #
 @app.route("/get_alliance", methods=["POST"])
 @cross_origin(support_credentials=True)
-@limiter.limit("10 per day")
+@limiter.limit("1000 per day")
 def get_alliance_size():
     key = request.json['passphrase']
     cur = get_db().cursor()
@@ -88,7 +88,7 @@ def get_alliance_size():
 # ------- Destroy Alliance -------------------------------------------------------- #
 @app.route("/destroy_alliance", methods=["POST"])
 @cross_origin(support_credentials=True)
-@limiter.limit("1 per day")
+@limiter.limit("10 per day")
 def destroy_alliance():
     key = request.json['passphrase']
     message = request.json['message']
