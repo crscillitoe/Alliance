@@ -55,7 +55,7 @@ def form_alliance():
         ?,
         ?,
         1,
-        ''
+        NULL
     )
     """, (str(random_uuid), name))
 
@@ -82,7 +82,7 @@ def get_alliance_size():
     return {
         'name': str(result[0]),
         'size': result[1],
-        'destroyed': str(result[2])
+        'destroyed': result[2]
     }, 200
 # --------------------------------------------------------------------------------- #
 # ------- Destroy Alliance -------------------------------------------------------- #
