@@ -10,14 +10,16 @@ import SwiftUI
 class AllianceIdentifierModel: ObservableObject {
     @Published var allianceId: String? = nil
     @Published var allianceName: String? = nil
+    @Published var destroyedMessage: String? = nil
 
     init() {
         loadAlliance()
     }
     
-    init(allianceId: String, allianceName: String) {
+    init(allianceId: String? = nil, allianceName: String? = nil, destroyedMessage: String? = nil) {
         self.allianceId = allianceId
         self.allianceName = allianceName
+        self.destroyedMessage = destroyedMessage
     }
 
     func loadAlliance() {
@@ -27,6 +29,10 @@ class AllianceIdentifierModel: ObservableObject {
             {
                 print("Loaded \(savedAllianceId) from UserDefaults")
                 self.allianceId = savedAllianceId
+                
+                Task {
+                    _ = try await FetchAllianceController.fetchAlliance(allianceIdentifierModel: self)
+                }
             }
             
             if let savedAllianceName = UserDefaults.standard.string(forKey: "allianceName") {
@@ -55,6 +61,13 @@ class AllianceIdentifierModel: ObservableObject {
             UserDefaults.standard.removeObject(forKey: "allianceName")
             self.allianceId = nil
             self.allianceName = nil
+            self.destroyedMessage = nil
+        }
+    }
+    
+    func publishDestroyedMessage(message: String?) {
+        DispatchQueue.main.async {
+            self.destroyedMessage = message
         }
     }
 }

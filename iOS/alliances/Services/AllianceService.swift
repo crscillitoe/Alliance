@@ -11,7 +11,7 @@ struct FetchAllianceRequest: Codable {
 }
 
 struct Alliance: Codable {
-    let destroyed: String
+    let destroyed: String?
     let name: String
     let size: Int
 }
@@ -67,7 +67,7 @@ class AllianceService {
             httpResponse.statusCode != 200
         {
             throw NSError(
-                domain: "Failed to fetch alliance", code: 0, userInfo: nil)
+                domain: "Failed to fetch alliance", code: httpResponse.statusCode, userInfo: nil)
         }
         
         guard

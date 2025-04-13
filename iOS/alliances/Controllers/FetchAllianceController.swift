@@ -14,6 +14,7 @@ class FetchAllianceController {
         }
         let alliance = try await AllianceService().fetchAlliance(allianceId: allianceId)
         allianceIdentifierModel.saveAllianceName(allianceName: alliance.name)
+        allianceIdentifierModel.publishDestroyedMessage(message: alliance.destroyed)
         return alliance
     }
 }
