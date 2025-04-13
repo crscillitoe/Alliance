@@ -9,11 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
-    @State private var isModelLoaded = false
+    
+    @State private var initialLoad = true;
     
     var body: some View {
         ZStack {
-            // This ensures the two views are stacked on top of each other, allowing transitions
             if allianceIdentifierModel.allianceId == nil {
                 NoAllianceHomeView()
                     .transition(.move(edge: .leading))
@@ -24,25 +24,23 @@ struct ContentView: View {
                             .move(edge: .leading) :
                                 .move(edge: .trailing)
                     )
-            } else {
+            } else  {
                 InAllianceHomeView()
                     .transition(.move(edge: .trailing))
             }
         }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                allianceIdentifierModel.loadAlliance()
-                isModelLoaded = true
-            }
-        }
         .animation(
-            isModelLoaded ? .easeInOut : .none,
+            initialLoad ? .easeInOut : .none,
             value: allianceIdentifierModel.allianceId
         )
         .animation(
-            isModelLoaded ? .easeInOut : .none,
+            initialLoad ? .easeInOut : .none,
             value: allianceIdentifierModel.destroyedMessage
         )
+        .onAppear {
+            initialLoad = false;
+        }
+        
     }
 }
 

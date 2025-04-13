@@ -12,32 +12,31 @@ class AllianceIdentifierModel: ObservableObject {
     @Published var allianceId: String? = nil
     @Published var allianceName: String? = nil
     @Published var destroyedMessage: String? = nil
-    let log = Logger(label: "AllianceIdentifierModel")
-
-    init() {
-        loadAlliance()
-    }
+    @Published var allianceSize: Int? = nil
     
-    init(allianceId: String? = nil, allianceName: String? = nil, destroyedMessage: String? = nil) {
+    let log = Logger(label: "AllianceIdentifierModel")
+    
+    init(allianceId: String? = nil, allianceName: String? = nil, destroyedMessage: String? = nil, allianceSize: Int? = nil) {
         self.allianceId = allianceId
         self.allianceName = allianceName
         self.destroyedMessage = destroyedMessage
+        self.allianceSize = allianceSize
     }
 
-    func loadAlliance() {
-        DispatchQueue.main.async {
-            if let savedAllianceId = UserDefaults.standard.string(
-                forKey: "allianceId")
-            {
-                self.log.debug("Loaded \(savedAllianceId) from UserDefaults")
+    func loadAllianceFromCache() async -> Void {
+        if self.allianceId != nil { return }
+        if let savedAllianceId = UserDefaults.standard.string(
+            forKey: "allianceId")
+        {
+            self.log.debug("Loaded ID \(savedAllianceId) from UserDefaults")
+            await MainActor.run {
                 self.allianceId = savedAllianceId
-                
-                Task {
-                    _ = try await FetchAllianceController.fetchAlliance(allianceIdentifierModel: self)
-                }
             }
-            
-            if let savedAllianceName = UserDefaults.standard.string(forKey: "allianceName") {
+        }
+        
+        if let savedAllianceName = UserDefaults.standard.string(forKey: "allianceName") {
+            self.log.debug("Loaded name \(savedAllianceName) from UserDefaults")
+            await MainActor.run {
                 self.allianceName = savedAllianceName
             }
         }
@@ -45,15 +44,9 @@ class AllianceIdentifierModel: ObservableObject {
 
     func saveAllianceID(_ allianceId: String) {
         DispatchQueue.main.async {
+            self.log.debug("Saving alliance ID: \(allianceId)")
             UserDefaults.standard.set(allianceId, forKey: "allianceId")
             self.allianceId = allianceId
-        }
-    }
-    
-    func saveAllianceName(allianceName: String) {
-        DispatchQueue.main.async {
-            UserDefaults.standard.set(allianceName, forKey: "allianceName")
-            self.allianceName = allianceName
         }
     }
 
@@ -64,12 +57,16 @@ class AllianceIdentifierModel: ObservableObject {
             self.allianceId = nil
             self.allianceName = nil
             self.destroyedMessage = nil
+            self.allianceSize = nil
         }
     }
     
-    func publishDestroyedMessage(message: String?) {
+    func publishAlliance(alliance: Alliance) {
         DispatchQueue.main.async {
-            self.destroyedMessage = message
+            UserDefaults.standard.set(alliance.name, forKey: "allianceName")
+            self.allianceName = alliance.name
+            self.allianceSize = alliance.size
+            self.destroyedMessage = alliance.destroyed
         }
     }
 }

@@ -9,8 +9,6 @@ import SwiftUI
 import Logging
 
 struct InAllianceHomeView: View {
-    @State var allianceSize: Int?
-    @State var isLoading = true
     @State var destroying = false
 
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
@@ -20,8 +18,8 @@ struct InAllianceHomeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if !isLoading {
-                    let allianceSize = self.allianceSize ?? 0
+                if allianceIdentifierModel.allianceId != nil {
+                    let allianceSize = self.allianceIdentifierModel.allianceSize ?? 0
                     Text("Alliance Members")
                         .font(.headline)
                         .padding(.top, 70)
@@ -57,11 +55,6 @@ struct InAllianceHomeView: View {
             }
             .containerRelativeFrame([.horizontal, .vertical])
             .background(.black)
-            .onAppear {
-                if allianceSize == nil {
-                    fetchAlliance()
-                }
-            }
             .navigationDestination(isPresented: $destroying) {
                 DestroyAllianceView()
             }
@@ -87,25 +80,14 @@ struct InAllianceHomeView: View {
         }
         return name.isEmpty ? defaultName : name
     }
-
-    private func fetchAlliance() {
-        Task {
-            do {
-                let alliance = try await FetchAllianceController.fetchAlliance(
-                    allianceIdentifierModel: allianceIdentifierModel)
-                allianceSize = alliance.size
-                isLoading = false
-            } catch {
-                log.error("Error: \(error)")
-            }
-        }
-    }
 }
 
 #Preview {
-    InAllianceHomeView(allianceSize: 1, isLoading: false)
+    InAllianceHomeView()
         .environmentObject(
             AllianceIdentifierModel(
                 allianceId: "cd3645ef-a3d3-42e9-84a2-47d96cb81845",
-                allianceName: "Test Alliance"))
+                allianceName: "Test Alliance",
+                allianceSize: 100
+            ))
 }

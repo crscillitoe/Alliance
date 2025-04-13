@@ -14,5 +14,6 @@ class FormAllianceController {
         }
         let allianceId = try await AllianceService().formAlliance(allianceName: allianceName)
         allianceIdentifierModel.saveAllianceID(allianceId)
+        allianceIdentifierModel.publishAlliance(alliance: Alliance(destroyed: nil, name: allianceName, size: 1))
     }
 }

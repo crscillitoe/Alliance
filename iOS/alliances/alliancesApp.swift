@@ -12,10 +12,16 @@ import Logging
 struct alliancesApp: App {
     @StateObject private var allianceIdentifierModel: AllianceIdentifierModel
     @StateObject private var foregroundObserver: ForegroundObserver
+    @Environment(\.scenePhase) private var scenePhase
+    
+    private var log: Logger
+
     
 
     init() {
         alliancesApp.setupLogging()
+        self.log = Logger(label: "alliancesApp")
+        log.debug("Initializing App")
         let identifierModel = AllianceIdentifierModel()
         _allianceIdentifierModel = StateObject(wrappedValue: identifierModel)
 
@@ -32,8 +38,24 @@ struct alliancesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(allianceIdentifierModel)
+            if foregroundObserver.freshData {
+                ContentView()
+                    .environmentObject(allianceIdentifierModel)
+                    .onChange(of: scenePhase) { oldValue, newValue in
+                        if newValue == .background {
+                            foregroundObserver.refreshDataOnNextLaunch()
+                        }
+                    }
+            } else {
+                ProgressView()
+                    .progressViewStyle(
+                        CircularProgressViewStyle(tint: .white)
+                    )
+                    .scaleEffect(2)
+                    .containerRelativeFrame([.horizontal, .vertical])
+                    .background(.black)
+            }
+            
         }
     }
 

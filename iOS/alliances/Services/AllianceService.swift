@@ -5,6 +5,7 @@
 //  Created by Bradford Bonanno on 3/23/25.
 //
 import Foundation
+import Logging
 
 struct FetchAllianceRequest: Codable {
     let passphrase: String
@@ -27,6 +28,7 @@ struct FormAllianceRequest: Codable {
 
 class AllianceService {
     let baseURL = "https://alliance-api.woohooj.in"
+    let log = Logger(label: "AllianceService")
 
     func formAlliance(allianceName: String) async throws -> String {
         guard let url = URL(string: "\(baseURL)/form_alliance") else {
@@ -49,6 +51,7 @@ class AllianceService {
     }
 
     func fetchAlliance(allianceId: String) async throws -> Alliance {
+        log.debug("Fetching alliance: \(allianceId)")
         guard let url = URL(string: "\(baseURL)/get_alliance") else {
             throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
         }

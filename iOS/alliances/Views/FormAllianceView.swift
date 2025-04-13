@@ -89,7 +89,6 @@ struct FormAllianceView: View {
                 try await FormAllianceController.formAlliance(
                     allianceName: allianceName,
                     allianceIdentifierModel: allianceIdentifierModel)
-                //dismiss()
             } catch {
                 log.error("Error: \(error)")
             }

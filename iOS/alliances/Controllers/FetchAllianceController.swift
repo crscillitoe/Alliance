@@ -6,15 +6,19 @@
 //
 
 import Foundation
+import Logging
+
+let log = Logger(label: "FetchAllianceController")
 
 class FetchAllianceController {
     static func fetchAlliance(allianceIdentifierModel: AllianceIdentifierModel) async throws -> Alliance {
+        log.debug("Starting fetch alliance process")
+        await allianceIdentifierModel.loadAllianceFromCache()
         guard let allianceId = allianceIdentifierModel.allianceId else {
             throw NSError(domain: "Cannot fetch alliance without an ID", code: 1001, userInfo: nil)
         }
         let alliance = try await AllianceService().fetchAlliance(allianceId: allianceId)
-        allianceIdentifierModel.saveAllianceName(allianceName: alliance.name)
-        allianceIdentifierModel.publishDestroyedMessage(message: alliance.destroyed)
+        allianceIdentifierModel.publishAlliance(alliance: alliance)
         return alliance
     }
 }

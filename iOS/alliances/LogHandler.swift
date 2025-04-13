@@ -32,10 +32,3 @@ struct LogLevelHandler: LogHandler {
         }
     }
 }
-
-// Bootstrap logging with your custom handler and default level
-func setupLogging() {
-    LoggingSystem.bootstrap { label in
-        LogLevelHandler(label: label)
-    }
-}
