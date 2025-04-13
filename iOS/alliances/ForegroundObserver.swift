@@ -7,9 +7,11 @@
 
 import SwiftUI
 import UIKit
+import Logging
 
 class ForegroundObserver: ObservableObject {
     @ObservedObject var allianceIdentifierModel: AllianceIdentifierModel
+    let log = Logger(label: "ForegroundObserver")
     
     init(allianceIdentifierModel: AllianceIdentifierModel) {
         self.allianceIdentifierModel = allianceIdentifierModel
@@ -19,7 +21,7 @@ class ForegroundObserver: ObservableObject {
     }
 
     @objc func appDidBecomeActive() {
-        print("App did become foregrounded")
+        log.debug("App did become foregrounded")
         
         if allianceIdentifierModel.allianceId != nil {
             DispatchQueue.main.async {

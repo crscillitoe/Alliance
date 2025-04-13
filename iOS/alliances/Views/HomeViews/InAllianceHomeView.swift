@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Logging
 
 struct InAllianceHomeView: View {
     @State var allianceSize: Int?
@@ -13,6 +14,8 @@ struct InAllianceHomeView: View {
     @State var destroying = false
 
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
+    
+    let log = Logger(label: "InAllianceHomeView")
 
     var body: some View {
         NavigationStack {
@@ -93,7 +96,7 @@ struct InAllianceHomeView: View {
                 allianceSize = alliance.size
                 isLoading = false
             } catch {
-                print("Error:", error)
+                log.error("Error: \(error)")
             }
         }
     }

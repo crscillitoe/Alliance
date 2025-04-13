@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Logging
 
 var primaryButtonColor: Color = Color(
     red: 230 / 255,
@@ -18,6 +19,7 @@ struct DestroyAllianceView: View {
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
     @State private var message: String = ""
     @State private var showAlert = false
+    let log = Logger(label: "DestroyAllianceView")
 
     var gradient = LinearGradient(
         gradient: Gradient(colors: [
@@ -111,12 +113,12 @@ struct DestroyAllianceView: View {
     private func destroyAlliance() {
         Task {
             do {
-                guard let allianceId = allianceIdentifierModel.allianceId else {
+                guard allianceIdentifierModel.allianceId != nil else {
                     return
                 }
                 _ = try await DestroyAllianceController.destroyAlliance(destroyMessage: message, allianceIdentifierModel: allianceIdentifierModel)
             } catch {
-                print("Error:", error)
+                log.error("Error: \(error)")
             }
         }
     }

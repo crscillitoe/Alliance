@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0F7F040F2DAB46DD002616FE /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 0F7F040E2DAB46DD002616FE /* Logging */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		0F446F8A2D90C58F003A231C /* alliances.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = alliances.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F7F040F2DAB46DD002616FE /* Logging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = alliances;
 			packageProductDependencies = (
+				0F7F040E2DAB46DD002616FE /* Logging */,
 			);
 			productName = alliances;
 			productReference = 0F446F8A2D90C58F003A231C /* alliances.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 0F446F812D90C58F003A231C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0F7F040D2DAB46DD002616FE /* XCRemoteSwiftPackageReference "swift-log" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F446F8B2D90C58F003A231C /* Products */;
 			projectDirPath = "";
@@ -322,6 +331,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0F7F040D2DAB46DD002616FE /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0F7F040E2DAB46DD002616FE /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0F7F040D2DAB46DD002616FE /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0F446F822D90C58F003A231C /* Project object */;
 }

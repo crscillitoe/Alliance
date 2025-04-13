@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Logging
 
 class AllianceIdentifierModel: ObservableObject {
     @Published var allianceId: String? = nil
     @Published var allianceName: String? = nil
     @Published var destroyedMessage: String? = nil
+    let log = Logger(label: "AllianceIdentifierModel")
 
     init() {
         loadAlliance()
@@ -27,7 +29,7 @@ class AllianceIdentifierModel: ObservableObject {
             if let savedAllianceId = UserDefaults.standard.string(
                 forKey: "allianceId")
             {
-                print("Loaded \(savedAllianceId) from UserDefaults")
+                self.log.debug("Loaded \(savedAllianceId) from UserDefaults")
                 self.allianceId = savedAllianceId
                 
                 Task {
