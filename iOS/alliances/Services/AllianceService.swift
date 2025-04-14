@@ -104,4 +104,29 @@ class AllianceService {
         }
         return httpResponse.statusCode == 200
     }
+    
+    func joinAlliance(allianceId: String) async throws -> Void {
+        log.debug("Joining alliance: \(allianceId)")
+        guard let url = URL(string: "\(baseURL)/join_alliance") else {
+            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let requestBody = FetchAllianceRequest(passphrase: allianceId)
+        let encoder = JSONEncoder()
+        request.httpBody = try encoder.encode(requestBody)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        if let httpResponse = response as? HTTPURLResponse,
+            httpResponse.statusCode != 200
+        {
+            throw NSError(
+                domain: "Failed to fetch alliance", code: httpResponse.statusCode, userInfo: nil)
+        }
+    }
+
 }

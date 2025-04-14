@@ -12,6 +12,8 @@ import Logging
 struct alliancesApp: App {
     @StateObject private var allianceIdentifierModel: AllianceIdentifierModel
     @StateObject private var foregroundObserver: ForegroundObserver
+    @StateObject private var deepLinkManager = DeepLinkManager()
+
     @Environment(\.scenePhase) private var scenePhase
     
     private var log: Logger
@@ -41,10 +43,14 @@ struct alliancesApp: App {
             if foregroundObserver.freshData {
                 ContentView()
                     .environmentObject(allianceIdentifierModel)
+                    .environmentObject(deepLinkManager)
                     .onChange(of: scenePhase) { oldValue, newValue in
-                        if newValue == .background {
+                        if newValue == .background  && allianceIdentifierModel.allianceId != nil {
                             foregroundObserver.refreshDataOnNextLaunch()
                         }
+                    }
+                    .onOpenURL { url in
+                        deepLinkManager.handleDeepLink(url: url)
                     }
             } else {
                 ProgressView()

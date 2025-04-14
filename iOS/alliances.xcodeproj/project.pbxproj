@@ -14,9 +14,22 @@
 		0F446F8A2D90C58F003A231C /* alliances.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = alliances.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0F7F04732DAC7EA3002616FE /* Exceptions for "alliances" folder in "alliances" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0F446F892D90C58F003A231C /* alliances */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0F446F8C2D90C58F003A231C /* alliances */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0F7F04732DAC7EA3002616FE /* Exceptions for "alliances" folder in "alliances" target */,
+			);
 			path = alliances;
 			sourceTree = "<group>";
 		};
@@ -261,8 +274,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"alliances/Preview Content\"";
+				DEVELOPMENT_TEAM = JSU4TS7594;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = alliances/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -289,8 +304,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"alliances/Preview Content\"";
+				DEVELOPMENT_TEAM = JSU4TS7594;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = alliances/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

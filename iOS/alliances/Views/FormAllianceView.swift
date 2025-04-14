@@ -11,6 +11,7 @@ import Logging
 struct FormAllianceView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
+    
     @State private var allianceName: String = ""
     let log = Logger(label: "FormAllianceView")
 
@@ -73,6 +74,7 @@ struct FormAllianceView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(
             leading: Button(action: {
+                
                 dismiss()
             }) {
                 HStack {
