@@ -11,6 +11,8 @@ import Logging
 struct FormAllianceView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var allianceIdentifierModel: AllianceIdentifierModel
+    @FocusState private var fieldIsFocused: Bool
+
     
     @State private var allianceName: String = ""
     let log = Logger(label: "FormAllianceView")
@@ -23,7 +25,11 @@ struct FormAllianceView: View {
 
     var body: some View {
         VStack {
-            TextField("Name your alliance", text: $allianceName)
+            TextField("", text: $allianceName)
+                .focused($fieldIsFocused)
+                .onTapGesture {
+                    fieldIsFocused = true
+                }
                 .padding()
                 .background(.black)
                 .foregroundColor(.white)
@@ -49,7 +55,10 @@ struct FormAllianceView: View {
                     Text("Name your alliance")
                         .foregroundColor(.gray)
                         .opacity(allianceName.isEmpty ? 1 : 0)
-                        .padding(.horizontal, 15),
+                        .padding(.horizontal, 15)
+                        .onTapGesture {
+                            fieldIsFocused = true
+                        },
                     alignment: .leading
                 )
                 .onSubmit {
