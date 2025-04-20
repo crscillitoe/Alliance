@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0F7F040F2DAB46DD002616FE /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 0F7F040E2DAB46DD002616FE /* Logging */; };
+		0F7F047C2DB56CB1002616FE /* EFQRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 0F7F047B2DB56CB1002616FE /* EFQRCode */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0F7F040F2DAB46DD002616FE /* Logging in Frameworks */,
+				0F7F047C2DB56CB1002616FE /* EFQRCode in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = alliances;
 			packageProductDependencies = (
 				0F7F040E2DAB46DD002616FE /* Logging */,
+				0F7F047B2DB56CB1002616FE /* EFQRCode */,
 			);
 			productName = alliances;
 			productReference = 0F446F8A2D90C58F003A231C /* alliances.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				0F7F040D2DAB46DD002616FE /* XCRemoteSwiftPackageReference "swift-log" */,
+				0F7F047A2DB56CB1002616FE /* XCRemoteSwiftPackageReference "EFQRCode" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0F446F8B2D90C58F003A231C /* Products */;
@@ -358,6 +362,14 @@
 				minimumVersion = 1.6.3;
 			};
 		};
+		0F7F047A2DB56CB1002616FE /* XCRemoteSwiftPackageReference "EFQRCode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EFPrefix/EFQRCode.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.2.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -365,6 +377,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0F7F040D2DAB46DD002616FE /* XCRemoteSwiftPackageReference "swift-log" */;
 			productName = Logging;
+		};
+		0F7F047B2DB56CB1002616FE /* EFQRCode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0F7F047A2DB56CB1002616FE /* XCRemoteSwiftPackageReference "EFQRCode" */;
+			productName = EFQRCode;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

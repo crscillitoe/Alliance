@@ -44,6 +44,18 @@ struct InAllianceHomeView: View {
                             .cornerRadius(10)
                             .shadow(radius: 3)
                     }
+                    NavigationLink{
+                        InviteAllianceView()
+                    } label: {
+                        Text("Invite")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(minWidth: 200)
+                            .background(.gray)
+                            .cornerRadius(10)
+                            .shadow(radius: 3)
+                    }
                     Spacer()
                 } else {
                     ProgressView()
